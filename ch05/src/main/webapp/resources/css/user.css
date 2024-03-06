@@ -1,0 +1,42 @@
+*{
+    font-family: 'NanumGeumEunBoHwa';
+    font-weight: bold;
+    font-size: large;
+}
+div {
+    width: fit-content;
+    margin: 0  auto;
+    text-align: center;
+}
+h3{
+    font-size: 32px;
+    font-weight: bolder;
+    color: #be8484;
+}
+a {
+    display: inline-block;
+    border:  1px solid #cc9191;
+    margin: 0 10px;
+    padding: 3px;
+    text-decoration: none;
+    color: #e28899;
+    font-weight: bold;
+    font-size: large;
+}
+
+table{
+    margin: 0 auto;
+    margin-top: 10px;
+    border-collapse: collapse;
+    border:  1px solid #cc9191;
+}
+table th {
+    color: #5b5b5b;
+    padding: 5px;
+}
+
+table td{
+    color: #8f8d8d;
+    padding: 5px;
+    text-align: center;
+}
