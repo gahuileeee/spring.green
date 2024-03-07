@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ch05.mapper.LunchMapper">
+    <!-- 이 안에 쿼리문을 작성할 것임-->
+    <insert id="insertLunch">
+        INSERT INTO `lunchmenu` VALUES (null ,#{name},#{time},#{kind},#{comment}, #{score});
+        <!--?,? 이 형식이 아니라 저렇게 들어감-->
+    </insert>
+
+    <select id="selectLunchs" resultType="kr.co.ch05.dto.LunchDTO">
+        SELECT * FROM `lunchmenu`;
+    </select>
+
+    <select id="selectLunch" resultType="kr.co.ch05.dto.LunchDTO">
+        SELECT * FROM `lunchmenu` WHERE `seq` = #{seq} ;
+    </select>
+
+    <update id="updateLunch">
+        UPDATE `lunchmenu` SET
+        `time`= #{time},
+        `name`= #{name},
+        `kind`= #{kind},
+        `comment`= #{comment}
+        `score`= #{score}
+        WHERE `seq` = #{seq};
+    </update>
+
+    <delete id="deleteLunch">
+        DELETE FROM `lunchmenu` WHERE `seq` = #{seq} ;
+    </delete>
+
+    <select id="selectLunchOne" resultType="kr.co.ch05.dto.LunchDTO">
+        select * from `lunchmenu` order by rand() limit 1;
+    </select>
+</mapper>

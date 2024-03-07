@@ -18,8 +18,6 @@
     <form action="/ch05/user5/register" method="post">
         <table border="1px">
 
-
-
             <tr>
                 <td>이름</td>
                 <td><input type="text" name="name"></td>

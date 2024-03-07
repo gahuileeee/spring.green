@@ -41,5 +41,19 @@
     <a href="/ch05/user5/register">user5 등록</a>
     <a href="/ch05/user5/list">user5 리스트</a>
 </div>
+
+<div>
+    <h3>member 실습</h3>
+    <a href="/ch05/member/register">member 등록</a>
+    <a href="/ch05/member/list">member 리스트</a>
+</div>
+
+<div>
+    <h3>lunch 실습</h3>
+    <a href="/ch05/lunch/register">member 등록</a>
+    <a href="/ch05/lunch/list">member 리스트</a>
+    <a href="/ch05/lunch/random">member 추천</a>
+</div>
+
 </body>
 </html>

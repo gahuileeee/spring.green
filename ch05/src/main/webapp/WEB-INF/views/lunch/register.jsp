@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>user4::register</title>
+    <title>lunch::register</title>
     <link rel="stylesheet" href="/ch05/css/user.css">
     <link href="https://hangeul.pstatic.net/hangeul_static/css/NanumGeumEunBoHwa.css" rel="stylesheet">
 </head>
@@ -11,40 +11,36 @@
 
 </style>
 <body>
-    <div><h3>user4 등록</h3></div>
+    <div><h3>lunch 등록</h3></div>
     <div>
         <a href="/ch05">처음으로</a>
     </div>
-    <form action="/ch05/user4/register" method="post">
+    <form action="/ch05/lunch/register" method="post">
         <table border="1px">
-            <tr>
-                <td>아이디</td>
-                <td><input type="text" name="uid"></td>
-            </tr>
 
             <tr>
                 <td>이름</td>
-                <td><input type="text" name="name"></td>
+                <td><input type="text" name="name" ></td>
             </tr>
 
             <tr>
-                <td>성별</td>
-                <td><input type="text" name="gender"></td>
+                <td>시간</td>
+                <td><input type="text" name="time" ></td>
             </tr>
 
             <tr>
-                <td>나이</td>
-                <td><input type="number" name="age"></td>
+                <td>종류</td>
+                <td><input type="text" name="kind" ></td>
             </tr>
 
             <tr>
-                <td>휴대폰</td>
-                <td><input type="text" name="hp"></td>
+                <td>코멘트</td>
+                <td><input type="text" name="comment" ></td>
             </tr>
 
             <tr>
-                <td>주소</td>
-                <td><input type="text" name="addr"></td>
+                <td>별점</td>
+                <td><input type="text" name="score" ></td>
             </tr>
 
             <tr>
