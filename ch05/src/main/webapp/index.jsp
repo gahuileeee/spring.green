@@ -50,9 +50,9 @@
 
 <div>
     <h3>lunch 실습</h3>
-    <a href="/ch05/lunch/register">member 등록</a>
-    <a href="/ch05/lunch/list">member 리스트</a>
-    <a href="/ch05/lunch/random">member 추천</a>
+    <a href="/ch05/lunch/register">lunch 등록</a>
+    <a href="/ch05/lunch/list">lunch 리스트</a>
+    <a href="/ch05/lunch/random">lunch 추천</a>
 </div>
 
 </body>

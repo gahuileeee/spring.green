@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 원래 타임리프 쓰려면 이거 선언해야 하는데 생략 가능함-->
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+    <h3>ch06. 스프링 부트</h3>
+    <a href="/ch06/sub1/hello">hello</a>
+    <a href="/ch06/sub1/welcome">welcome</a>
+    <a href="/ch06/sub1/greeting">greeting</a>
+
+    <h4>타임리프 출력</h4>
+    <p>[[${str1}]] </p>
+    <p th:text="${str2}">내용</p>  <!--th가 타임리프 속성-->
+
+    <h4>타임리프 조건문</h4>
+    <p>
+        <span th:if="${user1.name=='홍길동'}">user1은 홍길동 입니다.</span>
+        <span th:if="${user1.name=='김유신'}">user1은 김유신 입니다.</span>
+    </p>
+
+    <p th:switch="${user1.age > 20}">
+        <span th:case="true">user1은 20세 이상입니다.</span>
+        <span th:case="false">user1은 20세 미만입니다.</span>
+
+    </p>
+    <p>
+        <span th:if="${user4}">user4는 참입니다.</span>
+        <span th:unless="${user4}">user4는 거짓입니다.</span>
+        <!-- unless = else-->
+    </p>
+
+
+    <h4>타임리프 반복문</h4>
+    <table border="1">
+        <tr th:each="user:${users}">
+            <td>[[${user.uid}]]</td>
+            <td>[[${user.name}]]</td>
+            <td>[[${user.age}]]</td>
+            <td>[[${user.addr}]]</td>
+        </tr>
+    </table>
+    <h4>타임리프 링크</h4>
+    <!--Context-path 지정 -->
+    <a th:href="@{/sub1/hello}">hello</a>
+    <a th:href="@{/sub1/welcome}">welcome</a>
+    <!--아래와 같은 의미인데 properties에 설정한 context-path를 수정하면
+    반영됨-->
+
+    <a href="/ch06/sub1/greeting">greeting</a>
+
+    <h4>타임리프 include</h4>
+    <th:block th:include="/include/_header.html"></th:block>
+    <th:block th:include="/include/_footer.html"></th:block>
+
+    <div th:insert="/include/_header.html"></div>
+    <div th:insert="/include/_footer.html"></div>
+
+    <div th:replace="/include/_header.html"></div>
+    <div th:replace="/include/_footer.html"></div>
+
+    <th:block th:include="~{/include/template::_header}"/>
+    <th:block th:include="~{/include/template::_footer}"/>
+
+    <h4>타임리프 layout</h4>
+    <a th:href="@{/sub2/content1}">content1</a>
+    <a th:href="@{/sub2/content2}">content2</a>
+
+    <h4>스프링부트 타임리프 실습</h4>
+    <a th:href="@{/user1/list}">user1목록</a>
+    <a th:href="@{/user2/list}">user2목록</a>
+    <a th:href="@{/user3/list}">user3목록</a>
+    <a th:href="@{/user4/list}">user4목록</a>
+    <a th:href="@{/user5/list}">user5목록</a>
+</body>
+</html>

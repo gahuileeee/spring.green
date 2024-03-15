@@ -20,7 +20,7 @@
 
             <tr>
                 <td>시간</td>
-                <td><input type="text" name="time" value="${lunch.time}" readonly></td>
+                <td><input type="text" name="time" value="${lunch.time} 분" readonly></td>
             </tr>
 
             <tr>

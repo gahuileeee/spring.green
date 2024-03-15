@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h3>User 로그인</h3>
+    <th:block th:if="${success == '100'}">
+        <script>
+            alert("로그인 실패")
+        </script>
+    </th:block>
+
+    <form method="post">
+        <input type="text" name="uid">
+        <input type="text" name="pass">
+        <input type="submit" value="로그인">
+    </form>
+    <a th:href="@{/user2/register}">회원가입</a>
+</body>
+</html>

@@ -25,7 +25,7 @@
 
             <tr>
                 <td>시간</td>
-                <td><input type="text" name="time" ></td>
+                <td><input type="number" name="time" placeholder="숫자만 입력해주세요"></td>
             </tr>
 
             <tr>

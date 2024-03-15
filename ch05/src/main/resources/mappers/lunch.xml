@@ -22,7 +22,7 @@
         `time`= #{time},
         `name`= #{name},
         `kind`= #{kind},
-        `comment`= #{comment}
+        `comment`= #{comment},
         `score`= #{score}
         WHERE `seq` = #{seq};
     </update>

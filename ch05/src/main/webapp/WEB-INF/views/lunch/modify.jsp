@@ -15,7 +15,9 @@
         <a href="/ch05">처음으로</a>
     </div>
     <form action="/ch05/lunch/modify" method="post">
+        <input type="hidden" name="seq" value="${lunch.seq}">
         <table border="1px">
+
             <tr>
                 <td>이름</td>
                 <td><input type="text" name="name" value="${lunch.name}"></td>

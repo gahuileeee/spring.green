@@ -1,0 +1,95 @@
+
+<html>
+<head>
+    <title>user1::register</title>
+</head>
+
+<script>
+    window.onload=function (){
+        //현재 url 파라미터 값 가져오기
+        const  url = location.href;
+        const param = url.split('?')[1];
+        const  uid = param.split('=')[1];
+        const  form = document.formUser1;
+        //수정 데이터 요청
+        fetch(`/ch09/user1/${uid}`,{
+            method:'GET'
+        })
+            .then(response => response.json())
+            .then(data =>{
+                form.uid.value = data.uid;
+                form.name.value = data.name;
+                form.birth.value = data.birth;
+                form.hp.value = data.hp;
+                form.age.value = data.age;
+            })
+            .catch(err => console.log(err));
+
+        //수정 요청하기
+        form.onsubmit = function (e){
+            e.preventDefault();
+            const  jsonData = {
+                "uid" : form.uid.value,
+                "name" : form.name.value,
+                "birth" : form.birth.value,
+                "hp" : form.hp.value,
+                "age" : form.age.value
+            };
+
+            fetch('/ch09/user1',{
+                method: 'PUT',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => response.json())
+                .then(data =>{
+                    console.log(data);
+                    if(data != null){
+                        alert('수정 되었습니다.');
+                        location.href='/ch09/user1/list';
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+
+    }
+
+</script>
+<body>
+    <div><h3>user1 수정</h3></div>
+    <div>
+        <a th:href="@{/}">처음으로</a>
+    </div>
+    <form name="formUser1" >
+        <table border="1px">
+            <tr>
+                <td>아이디</td>
+                <td><input type="text" name="uid" readonly ></td>
+            </tr>
+
+            <tr>
+                <td>이름</td>
+                <td><input type="text" name="name" ></td>
+            </tr>
+
+            <tr>
+                <td>생년월일</td>
+                <td><input type="date" name="birth" ></td>
+            </tr>
+
+            <tr>
+                <td>휴대폰</td>
+                <td><input type="text" name="hp" ></td>
+            </tr>
+
+            <tr>
+                <td>나이</td>
+                <td><input type="number" name="age" ></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right"><input type="submit" value="수정"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

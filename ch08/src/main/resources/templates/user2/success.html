@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="htts://www.thymeleaf.org/thymeleaf-extra-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h3>User 로그인 성공</h3>
+    <a th:href="@{/}"></a>
+    <p>
+        <a th:href="@{/admin/index}">최고관리자 페이지</a>
+        <a th:href="@{/manager/index}">운영자 페이지</a>
+    </p>
+     <p th:if="${session.sessUser != null}">
+         <!--로그인 되어있다면 뜨도록-->
+
+         아이디 : <span>[[${session.sessUser.uid}]]</span><br>
+         이름 : <span>[[${session.sessUser.name}]]</span><br>
+         나이 : <span>[[${session.sessUser.age}]]</span><br>
+         휴대폰 : <span>[[${session.sessUser.hp}]]</span><br>
+         가입일 : <span>[[${session.sessUser.regDate}]]</span><br>
+         권한 : <span>[[${session.sessUser.role}]]</span><br>
+         <a th:href="@{/user2/logout}">로그아웃</a>
+         <!-- principa 은 UserDetails 객체-->
+     </p >
+    <a th:href="@{/user2/result}">쿠키확인</a>
+</body>
+</html>
