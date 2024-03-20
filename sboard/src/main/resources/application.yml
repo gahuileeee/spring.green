@@ -1,19 +1,35 @@
 server:
     port: 8080
     servlet:
-        context-path: /ch10
+        context-path: /sboard
+mybatis:
+    mapper-locations: classpath:mappers/**/*.xml
 
 spring:
     application:
-        name: ch10
+        name: sboard
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Password1!
-        url: jdbc:mysql://127.0.0.1:3306/studydb
+        url: jdbc:mysql://127.0.0.1:3306/jboard
         username: abc1234
     devtools:
         livereload:
             enabled: true
+    # 이메일 설정
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: gahui446@gmail.com
+        password: bwyj apiz cjng yltd
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    timeout: 5000
+                    starttls:
+                        enable: true
+
     jpa:
         database: mysql
         hibernate:
@@ -24,10 +40,14 @@ spring:
             hibernate:
                 format_sql: true
                 show_sql: true
+    servlet:
+        multipart:
+            location: uploads/
+            max-file-size: 10MB
 
 logging:
     file:
-        name: logs/ch10.log
+        name: logs/sboard.log
     level:
         jdbc:
             connection: info
@@ -40,3 +60,9 @@ logging:
 jwt:
     issuer: gahui446@gmail.com
     secret: eYgN3XAUp6AOJ089Il8TljMbX1W7KARC
+
+# 파일 업로드 설정
+file:
+     upload:
+            path: uploads/
+

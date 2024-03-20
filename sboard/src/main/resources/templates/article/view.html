@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layout/defaultLayout.html">
+
+<div class="container-fluid px-4" layout:fragment="content">
+    <script>
+        window.onload=function (){
+
+        }
+    </script>
+
+    <h3 class="mt-4 mb-4">게시판 글보기</h3>
+
+    <!-- 내용 시작 -->
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            OOO 글보기
+        </div>
+        <div class="card-body">
+
+            <form>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">글제목</label>
+                    <input type="email" class="form-control" id="exampleFormControlInput1" name="title" readonly th:value="${articleDTO.getTitle()}">
+                </div>
+
+                <div class="mb-3" th:if="${articleDTO.file > 0}">
+                    <label for="exampleFormControlInput1" class="form-label">첨부파일</label>
+                    <ul class="list-group" >
+
+                        <li th:each="file:${articleDTO.filesList}" class="list-group-item d-flex justify-content-between align-items-center">
+                            <a th:href="@{/article/fileDownload(fno=${file.fno})}">[[${file.oName}]]</a>
+                            <span class="badge text-bg-primary rounded-pill">[[${file.download}]]</span>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">글내용</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" name="content" readonly>[[${articleDTO.content}]]</textarea>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="text-end">
+        <a th:href="@{/article/list(cate=${articleDTO.cate})}" class="btn btn-dark mb-3" >목록</a>
+    </div>
+    <!-- 댓글 내용 시작-->
+    <form id="commentForm" th:action="@{/article/insertComment}" method="post">
+        <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
+        <input type="hidden" name="parent" th:value="${articleDTO.getNo()}">
+        <input type="hidden" name="cate" th:value="${articleDTO.cate}">
+        <div class="input-group">
+            <span class="input-group-text bg-dark text-white">댓글 입력</span>
+            <textarea class="form-control" aria-label="With textarea"  name="content" ></textarea>
+        </div>
+        <div class="mt-4 mb-4 text-end">
+            <button type="button" class="btn btn-dark"> 취소</button>
+            <input type="submit" class="btn btn-dark" id="btnSubmit" value="댓글등록">
+        </div>
+    </form>
+
+    <div class="mb-3" th:each="comment:${comments}">
+        <span>[[${comment.writer}]]</span>
+        <span>[[${comment.rdate}]]</span>
+        <textarea class="form-control"  rows="2">[[${comment.content}]]</textarea>
+    </div>
+
+    <!-- 댓글 내용 끝-->
+
+    <!-- 내용 끝 -->
+</div>
+</html>

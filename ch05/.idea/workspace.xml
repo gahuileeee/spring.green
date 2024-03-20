@@ -11,12 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d0485f90-d2f4-49f9-9f94-f88859146a93" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kr/co/ch05/config/JdbcConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/co/ch05/config/JdbcConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mappers/lunch.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mappers/lunch.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lunch/modify.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lunch/modify.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lunch/random.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lunch/random.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lunch/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/lunch/register.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ch10/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ch10/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ch10/src/main/java/kr/co/ch10/Ch10Application.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ch10/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../ch10/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ch10/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ch10/src/main/resources/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +65,7 @@
     &quot;Tomcat Server.modify.jsp.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/JAVA2/Desktop/WorkSpace2/Spring/ch05&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JAVA2/Desktop/nDrathing&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -100,18 +98,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.19">
-    <configuration default="true" type="TomeeConfiguration" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
-      <deployment />
-      <server-settings />
-      <predefined_log_file enabled="true" id="Tomcat" />
-      <predefined_log_file enabled="true" id="Tomcat Catalina" />
-      <predefined_log_file id="Tomcat Manager" />
-      <predefined_log_file id="Tomcat Host Manager" />
-      <predefined_log_file id="Tomcat Localhost Access" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ch05" type="TomeeConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="TomEE 10.1.19" ALTERNATIVE_JRE_ENABLED="false">
       <option name="COMMON_VM_ARGUMENTS" value="-Duser.language=en -Duser.region=us" />
       <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
@@ -217,6 +203,7 @@
       </deployment>
       <server-settings>
         <option name="BASE_DIRECTORY_NAME" value="20ad0551-d81d-4c52-889b-e2493595ca5d" />
+        <option name="HTTP_PORT" value="9090" />
         <option name="JNDI_PORT" value="1299" />
       </server-settings>
       <predefined_log_file enabled="true" id="Tomcat" />
@@ -294,6 +281,18 @@
         </option>
       </method>
     </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+      <deployment />
+      <server-settings />
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Tomcat Server.Tomcat 10.1.19" />
       <item itemvalue="TomEE Server.ch05" />
@@ -337,6 +336,11 @@
       <workItem from="1710204997060" duration="712000" />
       <workItem from="1710208141336" duration="26000" />
       <workItem from="1710208344216" duration="763000" />
+      <workItem from="1710467796817" duration="963000" />
+      <workItem from="1710471528400" duration="599000" />
+      <workItem from="1710487339475" duration="12000" />
+      <workItem from="1710487701245" duration="828000" />
+      <workItem from="1710810049226" duration="859000" />
     </task>
     <servers />
   </component>
