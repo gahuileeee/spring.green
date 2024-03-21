@@ -35,7 +35,7 @@
                     </td>
                     <td>[[${article.writer}]]</td>
                     <td>[[${article.hit}]]</td>
-                    <td>[[${article.rdate}]]</td>
+                    <td th:text="${article.rdate.toLocalDate()}"></td>
                 </tr>
                 </tbody>
             </table>

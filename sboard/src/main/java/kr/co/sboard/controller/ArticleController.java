@@ -76,5 +76,11 @@ public class ArticleController {
         log.info("info.. "+commentDTO);
         return articleService.inserComment(commentDTO);
     }
+
+    @ResponseBody
+    @DeleteMapping("/article/deleteComment/{no}")
+    public ResponseEntity deleteComment(@PathVariable("no") int no){
+     return   articleService.deleteComment(no);
+    }
 }
 

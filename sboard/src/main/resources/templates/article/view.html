@@ -34,34 +34,65 @@
 
                 console.log(jsonData);
 
-                // POST용 fetchData 호출(util.js 확인, 기존 fetchData 이름을 fetchGet으로 변경)
                 const data = await fetchPost(`/sboard/article/insertComment`, jsonData);
 
                 console.log(data);
+
                     //동적 추가
                 const commentList = document.getElementById("commentList");
 
-                   const commentArticle = ` <div class="mb-3" ">
+                   const commentArticle = ` <div class="mb-3 comment" >
                                          <form>
                                          <span>${writer} </span>
                                  <span>${new Date().toISOString().slice(0, 10)}</span>
                     <textarea class="form-control"  rows="2">${content}</textarea>
                    <div class="text-end mt-3">
-                    <button type="button" class="btn btn-dark"> 삭제</button>
-                     <button type="button" class="btn btn-dark"> 수정</button>
-                </div>
+ <button type="button" class="btn btn-dark btnCommentDelete" data-mode="remove" data-no="${data.no}" > 삭제</button>
+                    <button type="button" class="btn btn-dark"  data-mode="modify" data-no="${data.no}" > 수정</button>                </div>
                   </form>
                           </div>`;
 
                 commentList.insertAdjacentHTML('beforeend', commentArticle);
-                alert('댓글이 등록되었습니다.');
+                alertModal('댓글이 등록되었습니다');
                 formComment.content.value = "";
             }
+
+
+            // 댓글 삭제/수정(동적 이벤트 처리)
+            //////////////////////////////////////////////////////////////////////////
+            document.addEventListener('click', async function(e){
+
+                // 이벤트 대상의 클래스값이 remove일 경우
+                if(e.target.dataset.mode == 'remove'){
+                    e.preventDefault();
+
+                    // 해당 삭제에서 가장 가까운 부모 comment 문서객체 생성
+                    const comment = e.target.closest('.comment');
+
+                    // 댓글 번호
+                    const no = e.target.dataset.no;
+
+                    console.log('no : ' + no);
+
+                    // DELETE용 fetch 함수 정의
+                    const data = fetchDelete(`/sboard/article/deleteComment/${no}`);
+
+                    if(data){
+                        alertModal("삭제 되었습니다.");
+                        comment.remove();
+
+                    }
+
+                }else if(e.target.dataset.mode == 'modify'){
+                    const result = confirmModal("정말 수정 하시겠습니까?");
+                    console.log("result : " + result);
+                }
+
+            });
         }
     </script>
 
     <h3 class="mt-4 mb-4">게시판 글보기</h3>
-
     <!-- 내용 시작 -->
 
     <div class="card mb-4">
@@ -83,7 +114,6 @@
                     <ul class="list-group" >
 
                         <li th:each="file:${articleDTO.filesList}" class="list-group-item d-flex justify-content-between align-items-center">
-                            <!-- REST API : 개발자도구 열어서 해당 링크 주소 확인해 볼것  -->
                             <a th:href="@{/file/download/{fno}(fno=${file.fno})}" th:data-fno="${file.fno}" class="fileLink">[[${file.oName}]]</a>
                             <span class="badge text-bg-dark rounded-pill">[[${file.download}]]</span>
                         </li>
@@ -120,15 +150,15 @@
     </form>
 
     <div id="commentList">
-    <div class="mb-3" th:each="comment:${comments}"  >
+    <div class="mb-3 comment" th:each="comment:${comments}"  >
         <form>
         <span>[[${comment.writer}]] </span>
         <span th:text="${comment.rdate.toLocalDate()}"></span>
         <textarea class="form-control"  rows="2">[[${comment.content}]]</textarea>
             <th:block th:if="${#authentication.principal.user.uid == comment.writer}">
                 <div class="text-end mt-3">
-                    <button type="button" class="btn btn-dark"> 삭제</button>
-                    <button type="button" class="btn btn-dark"> 수정</button>
+                    <button type="button" class="btn btn-dark btnCommentDelete" data-mode="remove" th:data-no="${comment.no}" > 삭제</button>
+                    <button type="button" class="btn btn-dark"  data-mode="modify" th:data-no="${comment.no}" > 수정</button>
                 </div>
             </th:block>
         </form>
@@ -136,4 +166,5 @@
     </div>
 
 </div>
+
 </html>

@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,4 +69,12 @@ public class ArticleService {
                 .map(comment -> modelMapper.map(comment, ArticleDTO.class)).toList();
     }
 
+    public ResponseEntity deleteComment(int no){
+        articleRepository.deleteById(no);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("sucesss", "1");
+
+        return ResponseEntity.ok().body(map);
+    }
 }
