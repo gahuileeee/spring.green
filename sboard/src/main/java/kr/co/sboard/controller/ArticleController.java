@@ -14,8 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -69,7 +72,17 @@ public class ArticleController {
         model.addAttribute("comments",comments);
         return "/article/view";
     }
+    
+    //추후에 pg 추가하기
+    @GetMapping("/article/modify")
+    public String modify(int no, Model model){
+        ArticleDTO articleDTO = articleService.selectArticle(no);
+        model.addAttribute("article", articleDTO);
+        return "/article/modify";
+    }
 
+
+    //comment
     @PostMapping("/article/insertComment")
     public ResponseEntity insertComment(@RequestBody ArticleDTO commentDTO, HttpServletRequest request){
         commentDTO.setRegip(request.getRemoteAddr());
@@ -82,5 +95,25 @@ public class ArticleController {
     public ResponseEntity deleteComment(@PathVariable("no") int no){
      return   articleService.deleteComment(no);
     }
+
+    @ResponseBody
+    @PutMapping("/article/modifyComment")
+    public ResponseEntity  modifyComment(@RequestBody ArticleDTO commentDTO){
+        log.info("modify! "+commentDTO);
+        ArticleDTO oldComment = articleService.selectCommentByNo(commentDTO.getNo());
+        oldComment.setContent(commentDTO.getContent());
+
+        return articleService.updateComment(oldComment);
+    }
+
+    @ResponseBody
+    @GetMapping("/article/selectComment/{no}")
+    public ResponseEntity  selectComment(@PathVariable("no") int no){
+        ArticleDTO articleDTO =articleService.selectCommentByNo(no);
+        Map<String , Object> map = new HashMap<>();
+        map.put("article", articleDTO);
+        return ResponseEntity.ok().body(map);
+    }
+
 }
 

@@ -77,4 +77,15 @@ public class ArticleService {
 
         return ResponseEntity.ok().body(map);
     }
+
+    public ArticleDTO selectCommentByNo(int no){
+        return modelMapper.map(articleRepository.findById(no), ArticleDTO.class) ;
+    }
+
+    public ResponseEntity updateComment(ArticleDTO commentDTO){
+        Article article= articleRepository.save(modelMapper.map(commentDTO, Article.class));
+        Map<String, Object> map = new HashMap<>();
+        map.put("article", article);
+        return  ResponseEntity.ok().body(map);
+    }
 }

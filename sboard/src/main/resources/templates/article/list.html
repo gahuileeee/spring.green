@@ -14,7 +14,10 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            OOO 글목록
+            <span th:if="${cate == 'free'}">공지사항 글목록</span>
+            <span th:if="${cate == 'notice'}">자유게시판 글목록</span>
+            <span th:if="${cate == 'faq'}">자주묻는질문 글목록</span>
+            <span th:if="${cate == 'qna'}">묻고답하기 글목록</span>
         </div>
         <div class="card-body">
             <table class="table table-hover">
