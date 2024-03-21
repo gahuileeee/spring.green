@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/util.js}"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -106,13 +107,12 @@
             <!-- 내용 시작 -->
 
             <!-- 내용 끝 -->
-
         </main>
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; 이자바 [[${appName}]] 2024</div>
-                    <div>
+                    <div class="text-muted">Copyright &copy; 이가희 [[${appName}]] 2024</div>
+                    <div layout:fragment="appVersion">
                         <a href="#">[[${appVersion}]]</a>
                     </div>
                 </div>

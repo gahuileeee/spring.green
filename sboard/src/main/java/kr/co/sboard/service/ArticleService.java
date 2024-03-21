@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,8 +56,10 @@ public class ArticleService {
     }
 
     //comment
-    public  void inserComment(ArticleDTO articleDTO){
-        articleRepository.save(modelMapper.map(articleDTO,Article.class));
+    public ResponseEntity inserComment(ArticleDTO articleDTO){
+        Article savedArticle =articleRepository.save(modelMapper.map(articleDTO,Article.class));
+
+        return ResponseEntity.ok().body(savedArticle);
     }
 
     public List<ArticleDTO> selectComment(int parent){

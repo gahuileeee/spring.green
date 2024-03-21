@@ -4,8 +4,59 @@
 
 <div class="container-fluid px-4" layout:fragment="content">
     <script>
-        window.onload=function (){
+        window.onload = function (){
+            const fileLinks = document.getElementsByClassName('fileLink');
 
+            for(const fileLink of fileLinks){
+
+                // 파일 다운로드 요청과 동시에 다운로드 카운트 요청
+                fileLink.onclick = async function () {
+                    let count = parseInt(this.nextElementSibling.innerHTML);
+                    // FileController - downloadCount 요청 메서드 실행
+                    this.nextElementSibling.innerHTML = count+1;
+                }
+            }
+
+
+            // 댓글 등록
+            const formComment = document.formComment;
+            formComment.onsubmit = async function (e) {
+                e.preventDefault();
+                    const parent =  formComment.parent.value;
+                    const writer =  formComment.writer.value;
+                    const content =  formComment.content.value;
+
+                const jsonData = {
+                    "parent": formComment.parent.value,
+                    "writer": formComment.writer.value,
+                    "content": formComment.content.value
+                };
+
+                console.log(jsonData);
+
+                // POST용 fetchData 호출(util.js 확인, 기존 fetchData 이름을 fetchGet으로 변경)
+                const data = await fetchPost(`/sboard/article/insertComment`, jsonData);
+
+                console.log(data);
+                    //동적 추가
+                const commentList = document.getElementById("commentList");
+
+                   const commentArticle = ` <div class="mb-3" ">
+                                         <form>
+                                         <span>${writer} </span>
+                                 <span>${new Date().toISOString().slice(0, 10)}</span>
+                    <textarea class="form-control"  rows="2">${content}</textarea>
+                   <div class="text-end mt-3">
+                    <button type="button" class="btn btn-dark"> 삭제</button>
+                     <button type="button" class="btn btn-dark"> 수정</button>
+                </div>
+                  </form>
+                          </div>`;
+
+                commentList.insertAdjacentHTML('beforeend', commentArticle);
+                alert('댓글이 등록되었습니다.');
+                formComment.content.value = "";
+            }
         }
     </script>
 
@@ -32,9 +83,11 @@
                     <ul class="list-group" >
 
                         <li th:each="file:${articleDTO.filesList}" class="list-group-item d-flex justify-content-between align-items-center">
-                            <a th:href="@{/article/fileDownload(fno=${file.fno})}">[[${file.oName}]]</a>
-                            <span class="badge text-bg-primary rounded-pill">[[${file.download}]]</span>
+                            <!-- REST API : 개발자도구 열어서 해당 링크 주소 확인해 볼것  -->
+                            <a th:href="@{/file/download/{fno}(fno=${file.fno})}" th:data-fno="${file.fno}" class="fileLink">[[${file.oName}]]</a>
+                            <span class="badge text-bg-dark rounded-pill">[[${file.download}]]</span>
                         </li>
+
 
                     </ul>
                 </div>
@@ -53,10 +106,9 @@
         <a th:href="@{/article/list(cate=${articleDTO.cate})}" class="btn btn-dark mb-3" >목록</a>
     </div>
     <!-- 댓글 내용 시작-->
-    <form id="commentForm" th:action="@{/article/insertComment}" method="post">
+    <form name="formComment" th:action="@{/article/insertComment}" method="post">
         <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
         <input type="hidden" name="parent" th:value="${articleDTO.getNo()}">
-        <input type="hidden" name="cate" th:value="${articleDTO.cate}">
         <div class="input-group">
             <span class="input-group-text bg-dark text-white">댓글 입력</span>
             <textarea class="form-control" aria-label="With textarea"  name="content" ></textarea>
@@ -67,14 +119,21 @@
         </div>
     </form>
 
-    <div class="mb-3" th:each="comment:${comments}">
-        <span>[[${comment.writer}]]</span>
-        <span>[[${comment.rdate}]]</span>
+    <div id="commentList">
+    <div class="mb-3" th:each="comment:${comments}"  >
+        <form>
+        <span>[[${comment.writer}]] </span>
+        <span th:text="${comment.rdate.toLocalDate()}"></span>
         <textarea class="form-control"  rows="2">[[${comment.content}]]</textarea>
+            <th:block th:if="${#authentication.principal.user.uid == comment.writer}">
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-dark"> 삭제</button>
+                    <button type="button" class="btn btn-dark"> 수정</button>
+                </div>
+            </th:block>
+        </form>
+    </div>
     </div>
 
-    <!-- 댓글 내용 끝-->
-
-    <!-- 내용 끝 -->
 </div>
 </html>

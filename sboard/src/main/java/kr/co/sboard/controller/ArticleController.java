@@ -12,9 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,11 +29,10 @@ public class ArticleController {
          - modelAttribute("cate", cate)와 동일
     */
     @GetMapping("/article/list")
-    public String list(Model model, PageRequestDTO pageRequestDTO, @ModelAttribute("cate") String cate){
+    public String list(Model model, PageRequestDTO pageRequestDTO, @ModelAttribute("cate") String cate)
+           {
 
         PageResponseDTO pageResponseDTO = articleService.findByParentAndCate(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
-
         model.addAttribute(pageResponseDTO);
 
         return "/article/list";
@@ -73,17 +70,11 @@ public class ArticleController {
         return "/article/view";
     }
 
-    @GetMapping("/article/fileDownload")
-    public ResponseEntity fileDownload(int fno){
-       return fileService.fileDownload(fno);
-    }
-
     @PostMapping("/article/insertComment")
-    public String insertComment(ArticleDTO commentDTO, HttpServletRequest request){
+    public ResponseEntity insertComment(@RequestBody ArticleDTO commentDTO, HttpServletRequest request){
         commentDTO.setRegip(request.getRemoteAddr());
-        log.info("insertComment : "+commentDTO);
-        articleService.inserComment(commentDTO);
-
-        return "redirect:/article/view?no="+commentDTO.getParent();
+        log.info("info.. "+commentDTO);
+        return articleService.inserComment(commentDTO);
     }
 }
+
