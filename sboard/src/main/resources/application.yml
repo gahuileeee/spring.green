@@ -46,6 +46,8 @@ spring:
         multipart:
             location: uploads/
             max-file-size: 10MB
+    thymeleaf:
+      prefix: classpath:/templates
 
 logging:
     file:

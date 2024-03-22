@@ -1,5 +1,6 @@
 package kr.co.sboard.service;
 
+import jakarta.transaction.Transactional;
 import kr.co.sboard.dto.ArticleDTO;
 import kr.co.sboard.dto.PageRequestDTO;
 import kr.co.sboard.dto.PageResponseDTO;
@@ -39,6 +40,23 @@ public class ArticleService {
        fileService.fileUpload(articleDTO);
     }
 
+    public void modifyArticle(ArticleDTO articleDTO){
+        Article oArticle = articleRepository.findById(articleDTO.getNo()).get();
+        ArticleDTO oArticleDTO = modelMapper.map(oArticle, ArticleDTO.class);
+
+
+        oArticleDTO.setContent(articleDTO.getContent());
+        oArticleDTO.setTitle(articleDTO.getTitle());
+        oArticleDTO.setFiles(articleDTO.getFiles());
+
+        int count = fileService.fileUpload(oArticleDTO);
+
+        oArticleDTO.setFile(oArticleDTO.getFile()+count);
+        Article article = modelMapper.map(oArticleDTO, Article.class);
+        articleRepository.save(article);
+
+    }
+
     public ArticleDTO selectArticle(int no){
         return modelMapper.map(articleRepository.findById(no), ArticleDTO.class);
     }
@@ -56,6 +74,14 @@ public class ArticleService {
                 .total(total)
                 .build();
     }
+
+    public ArticleDTO updateArtice (ArticleDTO articleDTO){
+        Article article = modelMapper.map(articleDTO, Article.class);
+        Article article1 = articleRepository.save(article);
+        return modelMapper.map(article1, ArticleDTO.class);
+    }
+
+
 
     //comment
     public ResponseEntity inserComment(ArticleDTO articleDTO){

@@ -1,5 +1,6 @@
 package kr.co.sboard.controller;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sboard.dto.ArticleDTO;
 import kr.co.sboard.dto.FileDTO;
@@ -10,6 +11,7 @@ import kr.co.sboard.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.incrementer.HsqlMaxValueIncrementer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private  final FileService fileService;
+
     /*
         @ModelAttribute("cate")
          - modelAttribute("cate", cate)와 동일
@@ -66,21 +69,42 @@ public class ArticleController {
     public String view(int no, Model model){
         ArticleDTO articleDTO= articleService.selectArticle(no);
         model.addAttribute("articleDTO", articleDTO);
+        articleDTO.setHit(articleDTO.getHit() +1);
+        articleService.updateArtice(articleDTO);
 
         List<ArticleDTO> comments = articleService.selectComment(no);
         log.info("comments "+comments);
+        model.addAttribute("cate", articleDTO.getCate());
         model.addAttribute("comments",comments);
         return "/article/view";
     }
-    
+
     //추후에 pg 추가하기
     @GetMapping("/article/modify")
     public String modify(int no, Model model){
         ArticleDTO articleDTO = articleService.selectArticle(no);
         model.addAttribute("article", articleDTO);
+        model.addAttribute("cate", articleDTO.getCate());
         return "/article/modify";
     }
 
+    @ResponseBody
+    @PutMapping("/article/modifyFile")
+    public ResponseEntity modifyFile(@RequestBody Map<String, List<Integer>> map){
+        List<Integer> deleteList = map.get("deleteFileList");
+        int no = map.get("no").get(0);
+
+        return  fileService.deleteFile(deleteList, no);
+    }
+
+    @PostMapping("/article/modify")
+    public String modify(ArticleDTO articleDTO){
+        log.info("modify"+articleDTO.toString());
+
+        articleService.modifyArticle(articleDTO);
+
+        return "redirect:/article/view?no="+articleDTO.getNo();
+    }
 
     //comment
     @PostMapping("/article/insertComment")

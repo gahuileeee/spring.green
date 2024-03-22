@@ -4,12 +4,15 @@ import com.sun.net.httpserver.HttpHandler;
 import jakarta.transaction.Transactional;
 import kr.co.sboard.dto.ArticleDTO;
 import kr.co.sboard.dto.FileDTO;
+import kr.co.sboard.entity.Article;
+import kr.co.sboard.repository.ArticleRepository;
 import kr.co.sboard.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.ssl.SslProperties;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -26,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,14 +39,16 @@ import java.util.UUID;
 public class FileService {
     private  final FileRepository fileRepository;
     private  final  ModelMapper modelMapper;
+    private  final ArticleRepository articleRepository;
 
     @Value("${file.upload.path}")
     private  String fileUploadPath;
 
-    public  void fileUpload(ArticleDTO articleDTO)  {
+    public  int fileUpload(ArticleDTO articleDTO)  {
         String path = new File(fileUploadPath).getAbsolutePath();  //실제 업로드 할 시스템상의 경로 구하기
+        log.info("fileupload" + articleDTO.getFiles());
         int ano = articleDTO.getNo();
-
+        int count = 0;
             for(MultipartFile mf : articleDTO.getFiles()){
                 if(mf.getOriginalFilename() !=null && mf.getOriginalFilename() != ""){
                 String oName = mf.getOriginalFilename();
@@ -60,15 +66,15 @@ public class FileService {
                             .sName(sName)
                             .build();
                     fileRepository.save(fileDTO.toEntity());
-
+                    count++;
                 }catch (IOException e){
                     log.error("fileUpload : "+e.getMessage());
                 }
             }
         }
+            return count;
 
     }
-
     @Transactional
     public   ResponseEntity fileDownload(int fno) {
         try {
@@ -98,6 +104,40 @@ public class FileService {
             return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @Transactional
+    public ResponseEntity deleteFile(List<Integer> list, int no){
+        //파일 수 변경
+        Article article= articleRepository.findById(no).get();
+        ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
+        log.info("listsize!" +list.size());
+        log.info("!!"+articleDTO.getFile());
+        articleDTO.setFile(articleDTO.getFile() - list.size());
+        Article nArticle =modelMapper.map(articleDTO, Article.class);
+        log.info("!!"+nArticle.getFile());
+        articleRepository.save(nArticle);
+
+        //파일 삭제
+        String path = new File(fileUploadPath).getAbsolutePath();
+
+        for(int fno : list){
+            //DB에 삭제
+            kr.co.sboard.entity.File file  = fileRepository.findById(fno).get();
+            String sName = file.getSName();
+            fileRepository.deleteById(fno);
+
+            //실제로 삭제
+            File deleteFile = new File(fileUploadPath+File.separator+ sName);
+            if(deleteFile.exists()){
+                deleteFile.delete();
+            }
+        }
+
+        Map<String, Object> map2 = new HashMap<>();
+        map2.put("delte", "success");
+
+        return ResponseEntity.ok().body(map2);
     }
 
     public ResponseEntity<?> fileDownloadCount(int fno)  {
