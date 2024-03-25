@@ -2,6 +2,7 @@ package kr.co.sboard.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.sboard.dto.ArticleDTO;
+import kr.co.sboard.dto.FileDTO;
 import kr.co.sboard.dto.PageRequestDTO;
 import kr.co.sboard.dto.PageResponseDTO;
 import kr.co.sboard.entity.Article;
@@ -13,10 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +36,12 @@ public class ArticleService {
 
     public void insertArticle(ArticleDTO articleDTO){
         articleDTO.setFile(articleDTO.getFiles().size());
+
+        for(MultipartFile mf : articleDTO.getFiles()){
+            if(mf.getOriginalFilename() ==null || mf.getOriginalFilename() == ""){
+                articleDTO.setFile(0);
+            }
+        }
         Article article = modelMapper.map(articleDTO, Article.class);
         log.info(article.toString());
         Article savedArticle= articleRepository.save(article);
@@ -81,6 +92,11 @@ public class ArticleService {
         return modelMapper.map(article1, ArticleDTO.class);
     }
 
+    @Transactional
+    public  void  deleteArticle (int no){
+       articleRepository.deleteById(no);
+       articleRepository.deleteArticlesByParent(no);
+    }
 
 
     //comment

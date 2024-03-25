@@ -59,7 +59,7 @@
         </div>
         <div class="card-body">
 
-            <form name="formWrite" th:action="@{/article/modify}" method="post" enctype="multipart/form-data">
+            <form name="formWrite" th:action="@{/article/modify(pg=${pg})}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">글제목</label>
                     <input type="text" class="form-control" id="exampleFormControlInput1" name="title"
@@ -89,7 +89,7 @@
                     </ul>
                 </div>
                 <div class="text-end">
-                    <a th:href="@{/article/view(no=${article.no})}"  class="btn btn-dark text-end" >취소</a>
+                    <a th:href="@{/article/view(no=${article.no}, pg=${pg})}"  class="btn btn-dark text-end" >취소</a>
                     <button type="button" class="btn btn-dark text-end submit">수정 완료</button>
                 </div>
             </form>

@@ -194,10 +194,12 @@
     </div>
 
     <div class="text-end">
-        <a th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3" >삭제</a>
-        <a th:href="@{/article/modify(no=${articleDTO.getNo()})}"
+        <a th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3"
+        th:href="@{/article/delete(no=${articleDTO.getNo()} ,cate =${articleDTO.cate},  pg=${pg})}" >삭제</a>
+
+        <a th:href="@{/article/modify(no=${articleDTO.getNo()},  pg=${pg})}"
         th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3" >수정</a>
-        <a th:href="@{/article/list(cate=${articleDTO.cate})}" class="btn btn-dark mb-3" >목록</a>
+        <a th:href="@{/article/list(cate=${articleDTO.cate}, pg=${pg})}" class="btn btn-dark mb-3" >목록</a>
     </div>
     <!-- 댓글 내용 시작-->
     <form name="formComment" th:action="@{/article/insertComment}" method="post">

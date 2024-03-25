@@ -6,15 +6,19 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import kr.co.sboard.dto.TermsDTO;
 import kr.co.sboard.dto.UserDTO;
+import kr.co.sboard.entity.User;
 import kr.co.sboard.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -79,5 +83,41 @@ public class UserService {
 
     }
 
+    public ResponseEntity findByNameAndEmail(HttpSession session , UserDTO userDTO){
+       UserDTO userDTO2 = userMapper.findByNameAndEmail(userDTO);
+        Map<String, Object> map = new HashMap<>();
+       if(userDTO2 == null){
+           map.put("result" ,"null");
+           return ResponseEntity.ok().body(map);
+       }else {
+           map.put("result", userDTO);
+           sendEmailCode(session, userDTO.getEmail());
+           return ResponseEntity.ok().body(map);
+       }
+    }
+
+    public UserDTO findByEmail(String email){
+        return userMapper.findByEmail(email);
+    }
+
+    public ResponseEntity findByUidAndEmail(HttpSession session , UserDTO userDTO){
+        UserDTO userDTO2 = userMapper.findByUidAndEmail(userDTO);
+        Map<String, Object> map = new HashMap<>();
+        if(userDTO2 == null){
+            map.put("result" ,"null");
+            return ResponseEntity.ok().body(map);
+        }else {
+            map.put("result", userDTO);
+            sendEmailCode(session, userDTO.getEmail());
+            return ResponseEntity.ok().body(map);
+        }
+    }
+
+    public void updateUserPassword(UserDTO userDTO){
+        String encoded = passwordEncoder.encode(userDTO.getPass());
+        userDTO.setPass(encoded);
+
+        userMapper.updateUserPassword(userDTO);
+    }
 
 }

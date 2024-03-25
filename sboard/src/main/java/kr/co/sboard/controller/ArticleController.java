@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,8 +36,11 @@ public class ArticleController {
          - modelAttribute("cate", cate)와 동일
     */
     @GetMapping("/article/list")
-    public String list(Model model, PageRequestDTO pageRequestDTO, @ModelAttribute("cate") String cate)
-           {
+    public String list(Model model, PageRequestDTO pageRequestDTO, @ModelAttribute("cate") String cate, @RequestParam(value = "pg", required = false) Integer pg)
+    {
+        if(pg != null){
+            pageRequestDTO.setPg(pg);
+        }
 
         PageResponseDTO pageResponseDTO = articleService.findByParentAndCate(pageRequestDTO);
         model.addAttribute(pageResponseDTO);
@@ -66,7 +70,7 @@ public class ArticleController {
     }
 
     @GetMapping("/article/view")
-    public String view(int no, Model model){
+    public String view(int no, Model model, @ModelAttribute("pg") int pg){
         ArticleDTO articleDTO= articleService.selectArticle(no);
         model.addAttribute("articleDTO", articleDTO);
         articleDTO.setHit(articleDTO.getHit() +1);
@@ -79,9 +83,8 @@ public class ArticleController {
         return "/article/view";
     }
 
-    //추후에 pg 추가하기
     @GetMapping("/article/modify")
-    public String modify(int no, Model model){
+    public String modify(int no, Model model, @ModelAttribute("pg") int pg) {
         ArticleDTO articleDTO = articleService.selectArticle(no);
         model.addAttribute("article", articleDTO);
         model.addAttribute("cate", articleDTO.getCate());
@@ -97,17 +100,24 @@ public class ArticleController {
         return  fileService.deleteFile(deleteList, no);
     }
 
+    @GetMapping("/article/delete")
+    public String delete( int no, String cate, @ModelAttribute("pg") int pg) {
+        fileService.deleteFiles(no);
+        articleService.deleteArticle(no);
+        return "redirect:/article/list?cate="+cate+"&pg="+pg;
+    }
+
     @PostMapping("/article/modify")
-    public String modify(ArticleDTO articleDTO){
+    public String modify(ArticleDTO articleDTO, @ModelAttribute("pg") int pg){
         log.info("modify"+articleDTO.toString());
 
         articleService.modifyArticle(articleDTO);
 
-        return "redirect:/article/view?no="+articleDTO.getNo();
+        return "redirect:/article/view?no="+articleDTO.getNo()+"&pg="+pg;
     }
 
     //comment
-    @PostMapping("/article/insertComment")
+    @PostMapping("/article/insertComment" )
     public ResponseEntity insertComment(@RequestBody ArticleDTO commentDTO, HttpServletRequest request){
         commentDTO.setRegip(request.getRemoteAddr());
         log.info("info.. "+commentDTO);

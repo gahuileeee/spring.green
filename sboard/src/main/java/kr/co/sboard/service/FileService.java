@@ -111,8 +111,6 @@ public class FileService {
         //파일 수 변경
         Article article= articleRepository.findById(no).get();
         ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
-        log.info("listsize!" +list.size());
-        log.info("!!"+articleDTO.getFile());
         articleDTO.setFile(articleDTO.getFile() - list.size());
         Article nArticle =modelMapper.map(articleDTO, Article.class);
         log.info("!!"+nArticle.getFile());
@@ -138,6 +136,21 @@ public class FileService {
         map2.put("delte", "success");
 
         return ResponseEntity.ok().body(map2);
+    }
+
+    public  void deleteFiles(int ano){
+        String path = new File(fileUploadPath).getAbsolutePath();
+        List<kr.co.sboard.entity.File> files = fileRepository.findFilesByAno(ano);
+        for(kr.co.sboard.entity.File file : files){
+            String sName = file.getSName();
+            int fno = file.getFno();
+            fileRepository.deleteById(fno);
+
+            File deleteFile = new File(fileUploadPath+File.separator+sName);
+            if(deleteFile.exists()){
+                deleteFile.delete();
+            }
+        }
     }
 
     public ResponseEntity<?> fileDownloadCount(int fno)  {

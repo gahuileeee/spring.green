@@ -34,7 +34,7 @@
                 <tr th:each="article, index:${pageResponseDTO.dtoList}">
                     <td style="background: #8d8d8d; color: white">[[${pageResponseDTO.startNo - index.index}]]</td>
                     <td>
-                        <a th:href="@{/article/view(no=${article.no})}">[[${article.title}]]</a>
+                        <a th:href="@{/article/view(no=${article.no}, pg=${pageResponseDTO.getPg()})}">[[${article.title}]]</a>
                     </td>
                     <td>[[${article.writer}]]</td>
                     <td>[[${article.hit}]]</td>

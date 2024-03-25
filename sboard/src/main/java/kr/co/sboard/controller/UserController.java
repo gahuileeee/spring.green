@@ -100,4 +100,47 @@ public class UserController {
             return ResponseEntity.ok().body(resultMap);
         }
     }
+
+    @GetMapping("/user/findId")
+    public  String findId(){
+        return "/user/findId";
+    }
+    @PostMapping("/user/findId")
+    public  ResponseEntity findId(@RequestBody UserDTO userDTO, HttpSession session ){
+        return  userService.findByNameAndEmail(session, userDTO);
+    }
+
+    @PostMapping("/user/findIdResult")
+    public  String findIdResult(@RequestParam("email") String email , Model model){
+        log.info("이메일 : "+email);
+        model.addAttribute("user", userService.findByEmail(email));
+        return "/user/findIdResult";
+    }
+
+    @PostMapping("/user/findPassword")
+    public  ResponseEntity findPassword(@RequestBody UserDTO userDTO, HttpSession session ){
+        return  userService.findByUidAndEmail(session, userDTO);
+    }
+
+    @GetMapping("/user/findPassword")
+    public  String findPassword(){
+        log.info("여기1!");
+        return "/user/findPassword";
+    }
+
+    @PostMapping("/user/findPasswordChange")
+    public  String findPasswordChange(@RequestParam("email") String email, Model model){
+        model.addAttribute("user", userService.findByEmail(email));
+        return "/user/findPasswordChange";
+    }
+
+    @PostMapping("/user/passwordChange")
+    public  String passwordChange(@RequestParam("pass1")String pass1, @RequestParam("uid") String uid){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUid(uid);
+        userDTO.setPass(pass1);
+        userService.updateUserPassword(userDTO);
+        return "redirect:/user/login";
+    }
+
 }
