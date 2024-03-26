@@ -21,4 +21,12 @@ public interface UserMapper {
     public  UserDTO findByEmail(String email);
 
     public  void updateUserPassword(UserDTO userDTO);
+
+    public UserDTO findByUid(String uid);
+
+    public void updateUserForType(@Param("type") String type, @Param("value") String value, String uid);
+
+    public void userLeave(String uid);
+
+    public void updateUserAddr(UserDTO userDTO);
 }

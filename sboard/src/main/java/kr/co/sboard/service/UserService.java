@@ -120,4 +120,29 @@ public class UserService {
         userMapper.updateUserPassword(userDTO);
     }
 
+    //my
+    public UserDTO findByUid(String uid){
+        return userMapper.findByUid(uid);
+    }
+
+    //탈퇴
+    public  void userLeave(String uid){
+        userMapper.userLeave(uid);
+    }
+
+    //update
+    public ResponseEntity updateUserForType(String type, String value, String uid){
+        userMapper.updateUserForType(type, value, uid);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", "100");
+        return ResponseEntity.ok().body(map);
+    }
+
+    public ResponseEntity updateUserAddr(UserDTO userDTO){
+        userMapper.updateUserAddr(userDTO);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", "100");
+        return ResponseEntity.ok().body(map);
+    }
+
 }

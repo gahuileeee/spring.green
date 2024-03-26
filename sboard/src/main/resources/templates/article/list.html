@@ -31,6 +31,9 @@
                 </tr>
                 </thead>
                 <tbody>
+                <tr th:if="${pageResponseDTO.dtoList.size()<1}">
+                    <td colspan="5" class="text-center">작성된 글이 없습니다.</td>
+                </tr>
                 <tr th:each="article, index:${pageResponseDTO.dtoList}">
                     <td style="background: #8d8d8d; color: white">[[${pageResponseDTO.startNo - index.index}]]</td>
                     <td>
