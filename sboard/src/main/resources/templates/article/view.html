@@ -25,6 +25,7 @@
                     const parent =  formComment.parent.value;
                     const writer =  formComment.writer.value;
                     const content =  formComment.content.value;
+                    const nick = formComment.nick.value;
 
                 const jsonData = {
                     "parent": formComment.parent.value,
@@ -43,7 +44,7 @@
 
                    const commentArticle = ` <div class="mb-3 comment" >
                                          <form>
-                                         <span>${writer} </span>
+                                         <span>${nick} </span>
                                  <span>${new Date().toISOString().slice(0, 10)}</span>
                     <textarea class="form-control"  rows="2" readonly>${content}</textarea>
                    <div class="text-end mt-3">
@@ -193,17 +194,28 @@
 
     </div>
 
-    <div class="text-end">
+    <div class="text-end"  th:if="${keyword == null}">
         <a th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3"
         th:href="@{/article/delete(no=${articleDTO.getNo()} ,cate =${articleDTO.cate},  pg=${pg})}" >삭제</a>
 
         <a th:href="@{/article/modify(no=${articleDTO.getNo()},  pg=${pg})}"
         th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3" >수정</a>
-        <a th:href="@{/article/list(cate=${articleDTO.cate}, pg=${pg})}" class="btn btn-dark mb-3" >목록</a>
+        <a  th:if="${keyword == null}" th:href="@{/article/list(cate=${articleDTO.cate}, pg=${pg})}" class="btn btn-dark mb-3" >목록</a>
     </div>
+
+    <div class="text-end"  th:if="${keyword != null}">
+        <a th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3"
+           th:href="@{/article/delete(no=${articleDTO.getNo()} ,cate =${articleDTO.cate},  pg=${pg},  type=${type}, keyword=${keyword})}" >삭제</a>
+
+        <a th:href="@{/article/modify(no=${articleDTO.getNo()},  pg=${pg},  type=${type},keyword=${keyword})}"
+           th:if="${#authentication.principal.user.uid == articleDTO.writer}" class="btn btn-dark mb-3" >수정</a>
+        <a  th:href="@{/article/list(cate=${articleDTO.cate}, pg=${pg}, type=${type},keyword=${keyword})}" class="btn btn-dark mb-3" >목록</a>
+    </div>
+
     <!-- 댓글 내용 시작-->
     <form name="formComment" th:action="@{/article/insertComment}" method="post">
         <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
+        <input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}">
         <input type="hidden" name="parent" th:value="${articleDTO.getNo()}">
         <div class="input-group">
             <span class="input-group-text bg-dark text-white">댓글 입력</span>
@@ -218,7 +230,7 @@
     <div id="commentList">
     <div class="mb-3 comment" th:each="comment:${comments}"  >
         <form>
-        <span>[[${comment.writer}]] </span>
+        <span>[[${comment.nick}]] </span>
         <span th:text="${comment.rdate.toLocalDate()}"></span>
         <textarea class="form-control"  rows="2" readonly>[[${comment.content}]]</textarea>
             <th:block th:if="${#authentication.principal.user.uid == comment.writer}">

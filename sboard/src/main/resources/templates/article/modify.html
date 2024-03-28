@@ -27,7 +27,6 @@
             const submit = document.querySelectorAll('.submit')[0];
             submit.onclick= async function (e){
                 if(deleteFileList.length>0){
-                    console.log("삭제!");
                     const jsonData = {
                         deleteFileList : deleteFileList,
                         no: no
@@ -57,9 +56,12 @@
             <span th:if="${cate == 'faq'}">자주묻는질문 글수정</span>
             <span th:if="${cate == 'qna'}">묻고답하기 글수정</span>
         </div>
-        <div class="card-body">
-
+            <div class="card-body">
             <form name="formWrite" th:action="@{/article/modify(pg=${pg})}" method="post" enctype="multipart/form-data">
+                <div th:if="${keyword != null}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                    <input type="hidden" name="type" th:value="${type}">
+                </div>
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">글제목</label>
                     <input type="text" class="form-control" id="exampleFormControlInput1" name="title"
@@ -89,7 +91,8 @@
                     </ul>
                 </div>
                 <div class="text-end">
-                    <a th:href="@{/article/view(no=${article.no}, pg=${pg})}"  class="btn btn-dark text-end" >취소</a>
+                    <a th:if="${keyword == null}" th:href="@{/article/view(no=${article.no}, pg=${pg})}"  class="btn btn-dark text-end" >취소</a>
+                    <a th:if="${keyword != null}" th:href="@{/article/view(no=${article.no}, pg=${pg},type=${type},keyword=${keyword})}" class="btn btn-dark text-end" >취소</a>
                     <button type="button" class="btn btn-dark text-end submit">수정 완료</button>
                 </div>
             </form>

@@ -119,6 +119,7 @@
                         if(data.result > 0){
                             showResultInvalid(resultHp, '이미 사용중인 휴대폰 입니다.');
                         }else{
+                            showResultInvalid(resultHp, '');
                             const result = await confirmModal('휴대폰 번호를 변경하시겠습니까?');
                             if(result){
                                 const result2 = await fetchGet(`/sboard/my/hp/${value}/${uid}`);
@@ -237,7 +238,7 @@
 
     </script>
 
-    <h3 class="mt-4 mb-4">나의 설정</h3>
+    <h3 class="mt-4 mb-4">나의 설정 💖</h3>
     <!-- 내용 시작 -->
     <div class="card mb-4">
         <div class="card-header">

@@ -1,5 +1,6 @@
 package kr.co.sboard.service;
 
+import com.querydsl.core.Tuple;
 import jakarta.transaction.Transactional;
 import kr.co.sboard.dto.ArticleDTO;
 import kr.co.sboard.dto.FileDTO;
@@ -71,7 +72,9 @@ public class ArticleService {
     public ArticleDTO selectArticle(int no){
         return modelMapper.map(articleRepository.findById(no), ArticleDTO.class);
     }
-
+    
+    //일반 글 목록 조회
+ /*
     public PageResponseDTO findByParentAndCate(PageRequestDTO pageRequestDTO){
         Pageable pageable = pageRequestDTO.getPageable("no");
         Page<Article> pageArticle = articleRepository.findByParentAndCate(0, pageRequestDTO.getCate(), pageable);
@@ -85,6 +88,45 @@ public class ArticleService {
                 .total(total)
                 .build();
     }
+
+  */
+   public PageResponseDTO findByParentAndCate(PageRequestDTO pageRequestDTO){
+       Pageable pageable = pageRequestDTO.getPageable("no");
+       Page<Tuple> pageArticle = articleRepository.selectArticles(pageRequestDTO , pageable);
+       log.info(pageArticle.getContent().toString()+"!!");
+       List<ArticleDTO> dtoList = pageArticle.getContent().stream()
+               .map(tuple -> {
+                   Article article = tuple.get(0 ,Article.class);
+                   String nick = tuple.get(1, String.class);
+                   article.setNick(nick);
+                   return modelMapper.map(article, ArticleDTO.class);
+               })
+               .toList();
+       log.info(dtoList+" dto! !!");
+       int total = (int) pageArticle.getTotalElements();
+       return PageResponseDTO.builder()
+               .pageRequestDTO(pageRequestDTO)
+               .dtoList(dtoList)
+               .total(total)
+               .build();
+   }
+
+    public PageResponseDTO searchArticles(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Article> pageArticle = articleRepository.searchArticles(pageRequestDTO, pageable);
+
+        List<ArticleDTO> dtoList = pageArticle.getContent().stream()
+                .map(entity -> modelMapper.map(entity, ArticleDTO.class))
+                .toList();
+
+        int total = (int) pageArticle.getTotalElements();
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total(total)
+                .build();
+    }
+
 
     public ArticleDTO updateArtice (ArticleDTO articleDTO){
         Article article = modelMapper.map(articleDTO, Article.class);
@@ -107,8 +149,16 @@ public class ArticleService {
     }
 
     public List<ArticleDTO> selectComment(int parent){
-        return articleRepository.findArticlesByParent(parent).stream()
-                .map(comment -> modelMapper.map(comment, ArticleDTO.class)).toList();
+        List<Tuple> lists =articleRepository.selectComments(parent);
+
+        return lists.stream()
+                .map(tuple -> {
+                    Article article = tuple.get(0 ,Article.class);
+                    String nick = tuple.get(1, String.class);
+                    article.setNick(nick);
+                    return modelMapper.map(article, ArticleDTO.class);
+                })
+                .toList();
     }
 
     public ResponseEntity deleteComment(int no){

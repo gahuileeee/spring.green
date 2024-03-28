@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @Table(name = "article")
 @Entity
+@Setter
 public class Article {
 
     @Id
@@ -44,4 +45,6 @@ public class Article {
     @OneToMany(mappedBy = "ano")
     private List<File> filesList;
 
+    @Transient
+    private String nick;
 }

@@ -36,15 +36,25 @@ public class ArticleController {
          - modelAttribute("cate", cate)와 동일
     */
     @GetMapping("/article/list")
-    public String list(Model model, PageRequestDTO pageRequestDTO, @ModelAttribute("cate") String cate, @RequestParam(value = "pg", required = false) Integer pg)
-    {
-        if(pg != null){
-            pageRequestDTO.setPg(pg);
-        }
-
-        PageResponseDTO pageResponseDTO = articleService.findByParentAndCate(pageRequestDTO);
+    public String list(Model model, PageRequestDTO pageRequestDTO, @ModelAttribute("cate") String cate, @RequestParam(value = "pg", required = false) Integer pg) {
+        PageResponseDTO pageResponseDTO =null;
+        log.info(pageRequestDTO.toString() +"!!");
+        if(pageRequestDTO.getType() == null){
+             if(pg != null){
+                pageRequestDTO.setPg(pg);
+                }
+            //일반 글 목록 조회
+            pageResponseDTO = articleService.findByParentAndCate(pageRequestDTO);
+        }else{
+            if(pg != null){
+                pageRequestDTO.setPg(pg);
+            }
+            //검색 글 목록 조회
+            pageResponseDTO =articleService.searchArticles(pageRequestDTO);
+            model.addAttribute("keyword", pageRequestDTO.getKeyword());
+            model.addAttribute("type", pageRequestDTO.getType());
+            }
         model.addAttribute(pageResponseDTO);
-
         return "/article/list";
     }
 
@@ -70,7 +80,8 @@ public class ArticleController {
     }
 
     @GetMapping("/article/view")
-    public String view(int no, Model model, @ModelAttribute("pg") int pg){
+    public String view(int no, Model model, @ModelAttribute("pg") int pg, @ModelAttribute("keyword") String keyword,
+                       @ModelAttribute("type") String type){
         ArticleDTO articleDTO= articleService.selectArticle(no);
         model.addAttribute("articleDTO", articleDTO);
         articleDTO.setHit(articleDTO.getHit() +1);
@@ -84,7 +95,8 @@ public class ArticleController {
     }
 
     @GetMapping("/article/modify")
-    public String modify(int no, Model model, @ModelAttribute("pg") int pg) {
+    public String modify(int no, Model model, @ModelAttribute("pg") int pg, @ModelAttribute("keyword") String keyword,
+                         @ModelAttribute("type") String type) {
         ArticleDTO articleDTO = articleService.selectArticle(no);
         model.addAttribute("article", articleDTO);
         model.addAttribute("cate", articleDTO.getCate());
@@ -101,19 +113,28 @@ public class ArticleController {
     }
 
     @GetMapping("/article/delete")
-    public String delete( int no, String cate, @ModelAttribute("pg") int pg) {
+    public String delete( int no, String cate, @ModelAttribute("pg") int pg,  @ModelAttribute("keyword") String keyword,
+                          @ModelAttribute("type") String type) {
         fileService.deleteFiles(no);
         articleService.deleteArticle(no);
-        return "redirect:/article/list?cate="+cate+"&pg="+pg;
+        if(type != null){
+            return "redirect:/article/list?cate="+cate+"&pg="+pg+"&type="+type+"&keyword="+keyword;
+        }else{
+            return "redirect:/article/list?cate="+cate+"&pg="+pg;
+        }
+
     }
 
     @PostMapping("/article/modify")
-    public String modify(ArticleDTO articleDTO, @ModelAttribute("pg") int pg){
+    public String modify(ArticleDTO articleDTO, @ModelAttribute("pg") int pg,  @ModelAttribute("keyword") String keyword,
+                         @ModelAttribute("type") String type){
         log.info("modify"+articleDTO.toString());
-
         articleService.modifyArticle(articleDTO);
-
-        return "redirect:/article/view?no="+articleDTO.getNo()+"&pg="+pg;
+        if (type == null){
+            return "redirect:/article/view?no="+articleDTO.getNo()+"&pg="+pg;
+        }else{
+            return "redirect:/article/view?no="+articleDTO.getNo()+"&pg="+pg+"&type="+type+"&keyword="+keyword;
+        }
     }
 
     //comment
